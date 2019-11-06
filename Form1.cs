@@ -155,6 +155,7 @@ namespace test
                 for (int i = 0; i < d00.Length; i++)
                 {
                     time_chart.Series[0].Points.AddXY(vecTime[i], d00[i]);
+                    Console.WriteLine(vecTime[i]);
                 }
                 //save rawdata
                 for (int i = 0; i < d00.Length; i++)
@@ -167,8 +168,9 @@ namespace test
                 }
                 //
 
-                double rms = rootMeanSquare(d00);
-                Console.WriteLine(rms) ;
+                //double rms = rootMeanSquare(d00);
+                //Console.WriteLine(rms) ;
+                
 
                 //
                 PrecisionDateTime[] T = data[0].GetPrecisionTimeStamps();
