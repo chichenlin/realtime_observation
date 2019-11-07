@@ -168,8 +168,8 @@ namespace test
                 }
                 //
 
-                double rms = rootmeansquare(d00);
-                console.writeline(rms);
+                double rms = rootMeanSquare(d00);
+                Console.WriteLine(rms);
 
 
                 //
