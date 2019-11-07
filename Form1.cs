@@ -168,9 +168,9 @@ namespace test
                 }
                 //
 
-                //double rms = rootMeanSquare(d00);
-                //Console.WriteLine(rms) ;
-                
+                double rms = rootmeansquare(d00);
+                console.writeline(rms);
+
 
                 //
                 PrecisionDateTime[] T = data[0].GetPrecisionTimeStamps();
