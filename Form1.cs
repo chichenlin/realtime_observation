@@ -47,19 +47,12 @@ namespace test
         private void startbutton_Click(object sender, EventArgs e)
         {
             
-
-            
             Refresh();
             startbutton.Visible = false;
             stopbutton.Visible = true;
             time_chart.Series[0].Points.Clear();
-            StartDAQ(8000);
+            StartDAQ(6000);
             
-
-
-
-
-
         }
 
         private void stopbutton_Click(object sender, EventArgs e)
@@ -155,7 +148,7 @@ namespace test
                 for (int i = 0; i < d00.Length; i++)
                 {
                     time_chart.Series[0].Points.AddXY(vecTime[i], d00[i]);
-                    Console.WriteLine(vecTime[i]);
+                    //Console.WriteLine(vecTime[i]);
                 }
                 //save rawdata
                 for (int i = 0; i < d00.Length; i++)
@@ -168,8 +161,8 @@ namespace test
                 }
                 //
 
-                double rms = rootMeanSquare(d00);
-                Console.WriteLine(rms);
+                //double rms = rootMeanSquare(d00);
+                //Console.WriteLine(rms);
 
 
                 //
@@ -177,7 +170,7 @@ namespace test
 
                 double[] d0 = new double[d00.Length];
                 double[] d1 = new double[d10.Length];
-
+                //Console.WriteLine(d00.Length);
                 for (int i = 0; i < d0.Length; i++)
                 {
                     d0[i] = (d00[i] - d00.Average()) * 10;
@@ -225,19 +218,19 @@ namespace test
 
                 FFT_chart.Series[0].Points.Clear();
 
-                for (int j = 0; j < 600; j++)
+                for (int j = 0; j < 500; j++)
                 {
                     FFT_chart.Series[0].Points.AddXY(j, vecFFT[j]);
                 }
                 //save FFT data
-                for (int j = 0; j < 600; j++)
+                for (int j = 0; j < 500; j++)
                 {
                     SW_FFTDataX.Write(j);
                     SW_FFTDataX.Write(",");
                     SW_FFTDataX.WriteLine(vecFFT[j]);
                 }
                 //
-                analogInReader.BeginMemoryOptimizedReadWaveform(Convert.ToInt32(1280),
+                analogInReader.BeginMemoryOptimizedReadWaveform(Convert.ToInt32(1280*5),
                     analogCallback, myTask, data);
 
             }
