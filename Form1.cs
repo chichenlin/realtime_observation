@@ -32,8 +32,8 @@ namespace test
         int indexP;
         double SPmax;
         int iii;
-        public StreamWriter SW_RMSData;
-        public StreamWriter SW_State;
+        //public StreamWriter SW_RMSData;
+        //public StreamWriter SW_State;
         public StreamWriter SW_RawDataX;
         public StreamWriter SW_FFTDataX;
 
@@ -81,11 +81,11 @@ namespace test
             double sen = 100;
             double EVN = 0.004;
             double[] chan = new double[4] { 1, 1, 0, 0 };
+            //SW_RMSData = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\RMSData.txt");
+            //SW_State = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\State.txt");
+            SW_RawDataX = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_" + a + "_" + "RawDataX.txt");
+            SW_FFTDataX = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_" + a + "_" + "FFTDataX.txt");
 
-            SW_RMSData = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\RMSData.txt");
-            SW_State = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\State.txt");
-            SW_RawDataX = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\RawDataX.txt");
-            SW_FFTDataX = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\FFTDataX.txt");
 
             for (int i = 0; i < chan.Length; i++)
             {
@@ -101,7 +101,7 @@ namespace test
             }
 
             myTask.Timing.ConfigureSampleClock("", Convert.ToDouble(12800),
-                SampleClockActiveEdge.Rising, SampleQuantityMode.ContinuousSamples, Convert.ToInt32(1280));
+                SampleClockActiveEdge.Rising, SampleQuantityMode.ContinuousSamples, Convert.ToInt32(samplepoint.Text));
 
             myTask.Control(TaskAction.Verify);
 
@@ -112,15 +112,15 @@ namespace test
 
 
             analogInReader.SynchronizeCallbacks = true;
-            analogInReader.BeginReadWaveform(Convert.ToInt32(1280), analogCallback, myTask);
+            analogInReader.BeginReadWaveform(Convert.ToInt32(samplepoint.Text), analogCallback, myTask);
 
         }
 
         public void StopDAQ()
         {
             // Dispose of the task
-            SW_RMSData.Dispose();
-            SW_State.Dispose();
+            //SW_RMSData.Dispose();
+            //SW_State.Dispose();
             SW_RawDataX.Dispose();
             SW_FFTDataX.Dispose();
 
@@ -140,9 +140,16 @@ namespace test
                 data = analogInReader.EndReadWaveform(ar);
 
                 double[] vecTime = new double[data[0].SampleCount];
-
+                
                 double[] d00 = data[0].GetRawData();
                 double[] d10 = data[1].GetRawData();
+                PrecisionDateTime[] T = data[0].GetPrecisionTimeStamps();
+
+                for (int i = 0; i < data[0].SampleCount; i++)
+                {
+                    vecTime[i] = T[i].TimeOfDay.TotalSeconds;
+                }
+                              
                 //
                 time_chart.Series[0].Points.Clear();
                 for (int i = 0; i < d00.Length; i++)
@@ -150,11 +157,10 @@ namespace test
                     time_chart.Series[0].Points.AddXY(vecTime[i], d00[i]);
                     //Console.WriteLine(vecTime[i]);
                 }
+
                 //save rawdata
                 for (int i = 0; i < d00.Length; i++)
                 {
-                    SW_RawDataX.Write(i);
-                    SW_RawDataX.Write(",");
                     SW_RawDataX.Write(vecTime[i]);
                     SW_RawDataX.Write(",");
                     SW_RawDataX.WriteLine(d00[i]);
@@ -166,7 +172,7 @@ namespace test
 
 
                 //
-                PrecisionDateTime[] T = data[0].GetPrecisionTimeStamps();
+               
 
                 double[] d0 = new double[d00.Length];
                 double[] d1 = new double[d10.Length];
@@ -177,10 +183,7 @@ namespace test
                     d1[i] = (d10[i] - d10.Average()) * 10;
                 }
 
-                for (int i = 0; i < data[0].SampleCount; i++)
-                {
-                    vecTime[i] = T[i].TimeOfDay.TotalSeconds;
-                }
+             
                 double varFs = 1 / ((vecTime[data[0].SampleCount - 1] - vecTime[0]) / data[0].SampleCount);
 
                 //int indexMaterial = CUTeffiForm.indexMaterial;
@@ -191,12 +194,14 @@ namespace test
 
 
                 ////////////////////////////FFT////////////////////////////////////////
-                double[] d0Copy = new double[d0.Length * 10];
+                double datalength = d0.Length * 2;
+                double[] d0Copy = new double[d0.Length*2];//*10 d0.Length*5 12800                 
 
                 for (int i = 0; i < d0.Length; i++)
                 {
                     d0Copy[i] = d0[i];
                 }
+
                 double[] realdata = d0Copy;
                 double[] imagdata = new double[d0Copy.Length];
 
@@ -217,21 +222,24 @@ namespace test
                 }
 
                 FFT_chart.Series[0].Points.Clear();
+                double freq = 12800 / datalength;
+                textBox3.Text = Convert.ToString(freq);
+         
 
-                for (int j = 0; j < 500; j++)
+                for (int j = 0; j * freq < 300; j++)//vecFFT.Length
                 {
-                    FFT_chart.Series[0].Points.AddXY(j, vecFFT[j]);
+                    FFT_chart.Series[0].Points.AddXY(j*freq, vecFFT[j]);
                 }
                 //save FFT data
-                for (int j = 0; j < 500; j++)
+                
+                for (int j = 0; j * freq < 300; j++)
                 {
-                    SW_FFTDataX.Write(j);
+                    SW_FFTDataX.Write(j* freq);
                     SW_FFTDataX.Write(",");
                     SW_FFTDataX.WriteLine(vecFFT[j]);
                 }
                 //
-                analogInReader.BeginMemoryOptimizedReadWaveform(Convert.ToInt32(1280*5),
-                    analogCallback, myTask, data);
+                analogInReader.BeginMemoryOptimizedReadWaveform(Convert.ToInt32(samplepoint.Text), analogCallback, myTask, data);
 
             }
         }
@@ -246,14 +254,6 @@ namespace test
             return Math.Sqrt(sum / x.Length);
         }
 
-        private void time_chart_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
+     
     }
 }
