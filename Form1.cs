@@ -83,8 +83,8 @@ namespace test
             double[] chan = new double[4] { 1, 1, 0, 0 };
             //SW_RMSData = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\RMSData.txt");
             //SW_State = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\State.txt");
-            SW_RawDataX = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_" + a + "_" + "RawDataX.txt");
-            SW_FFTDataX = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_" + a + "_" + "FFTDataX.txt");
+            //SW_RawDataX = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_" + a + "_" + "RawDataX.txt");
+            //SW_FFTDataX = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_" + a + "_" + "FFTDataX.txt");
 
 
             for (int i = 0; i < chan.Length; i++)
@@ -121,8 +121,8 @@ namespace test
             // Dispose of the task
             //SW_RMSData.Dispose();
             //SW_State.Dispose();
-            SW_RawDataX.Dispose();
-            SW_FFTDataX.Dispose();
+            //SW_RawDataX.Dispose();
+            //SW_FFTDataX.Dispose();
 
             runningTask = null;
             myTask.Dispose();
@@ -139,6 +139,11 @@ namespace test
                 // Read the available data from the channels
                 data = analogInReader.EndReadWaveform(ar);
 
+                sw.Stop();
+                TimeSpan ts2 = sw.Elapsed;
+                Console.WriteLine(ts2);
+
+
                 double[] vecTime = new double[data[0].SampleCount];
                 
                 double[] d00 = data[0].GetRawData();
@@ -149,22 +154,31 @@ namespace test
                 {
                     vecTime[i] = T[i].TimeOfDay.TotalSeconds;
                 }
-                              
-                //
+
+                ////
+                //Console.WriteLine("擷取時間");
+                //Console.WriteLine(vecTime[vecTime.Length - 1]);//vecTime.Length - 1
+                //Console.WriteLine("系統時間");
+                //Console.WriteLine(DateTime.Now.TimeOfDay.TotalSeconds);
+                //Console.WriteLine("時間相差");
+                //Console.WriteLine(DateTime.Now.TimeOfDay.TotalSeconds - vecTime[vecTime.Length - 1]);
+                ////
                 time_chart.Series[0].Points.Clear();
                 for (int i = 0; i < d00.Length; i++)
                 {
-                    time_chart.Series[0].Points.AddXY(vecTime[i], d00[i]);
-                    //Console.WriteLine(vecTime[i]);
+                    time_chart.Series[0].Points.AddXY(vecTime[i]-vecTime[0], d00[i]);
+                  
                 }
 
+               
+
                 //save rawdata
-                for (int i = 0; i < d00.Length; i++)
-                {
-                    SW_RawDataX.Write(vecTime[i]);
-                    SW_RawDataX.Write(",");
-                    SW_RawDataX.WriteLine(d00[i]);
-                }
+                //for (int i = 0; i < d00.Length; i++)
+                //{
+                //    SW_RawDataX.Write(vecTime[i]);
+                //    SW_RawDataX.Write(",");
+                //    SW_RawDataX.WriteLine(d00[i]);
+                //}
                 //
 
                 //double rms = rootMeanSquare(d00);
@@ -172,7 +186,7 @@ namespace test
 
 
                 //
-               
+
 
                 double[] d0 = new double[d00.Length];
                 double[] d1 = new double[d10.Length];
@@ -231,14 +245,14 @@ namespace test
                     FFT_chart.Series[0].Points.AddXY(j*freq, vecFFT[j]);
                 }
                 //save FFT data
-                
-                for (int j = 0; j * freq < 300; j++)
-                {
-                    SW_FFTDataX.Write(j* freq);
-                    SW_FFTDataX.Write(",");
-                    SW_FFTDataX.WriteLine(vecFFT[j]);
-                }
-                //
+
+                //for (int j = 0; j * freq < 300; j++)
+                //{
+                //    SW_FFTDataX.Write(j * freq);
+                //    SW_FFTDataX.Write(",");
+                //    SW_FFTDataX.WriteLine(vecFFT[j]);
+                //}
+                ////
                 analogInReader.BeginMemoryOptimizedReadWaveform(Convert.ToInt32(samplepoint.Text), analogCallback, myTask, data);
 
             }
