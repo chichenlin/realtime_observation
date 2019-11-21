@@ -34,8 +34,8 @@ namespace test
         int iii;
         //public StreamWriter SW_RMSData;
         //public StreamWriter SW_State;
-        public StreamWriter SW_RawDataX;
-        public StreamWriter SW_FFTDataX;
+        //public StreamWriter SW_RawDataX;
+        //public StreamWriter SW_FFTDataX;
 
         public plotfigure()
         {
@@ -80,7 +80,7 @@ namespace test
             double Vmax = 5;
             double sen = 100;
             double EVN = 0.004;
-            double[] chan = new double[4] { 1, 1, 0, 0 };
+            double[] chan = new double[4] { 1, 1, 1, 0 };
             //SW_RMSData = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\RMSData.txt");
             //SW_State = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\State.txt");
             //SW_RawDataX = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_" + a + "_" + "RawDataX.txt");
@@ -148,6 +148,7 @@ namespace test
                 
                 double[] d00 = data[0].GetRawData();
                 double[] d10 = data[1].GetRawData();
+                double[] d20 = data[2].GetRawData();
                 PrecisionDateTime[] T = data[0].GetPrecisionTimeStamps();
 
                 for (int i = 0; i < data[0].SampleCount; i++)
@@ -164,10 +165,23 @@ namespace test
                 //Console.WriteLine(DateTime.Now.TimeOfDay.TotalSeconds - vecTime[vecTime.Length - 1]);
                 ////
                 time_chart.Series[0].Points.Clear();
+                time_chart.Series[1].Points.Clear();
+                time_chart.Series[2].Points.Clear();
+                
                 for (int i = 0; i < d00.Length; i++)
                 {
-                    time_chart.Series[0].Points.AddXY(vecTime[i]-vecTime[0], d00[i]);
-                  
+                    if(channal1.Checked == true)
+                    {
+                        time_chart.Series[0].Points.AddXY(vecTime[i] - vecTime[0], d00[i]);
+                    }
+                    if (channal2.Checked == true)
+                    {
+                        time_chart.Series[1].Points.AddXY(vecTime[i] - vecTime[0], d10[i]);
+                    }
+                    if (channal3.Checked == true)
+                    {
+                        time_chart.Series[2].Points.AddXY(vecTime[i] - vecTime[0], d20[i]);
+                    }
                 }
 
                
@@ -238,9 +252,9 @@ namespace test
                 FFT_chart.Series[0].Points.Clear();
                 double freq = 12800 / datalength;
                 textBox3.Text = Convert.ToString(freq);
-         
+                int frequency_range =Convert.ToInt32( textBox4.Text);
 
-                for (int j = 0; j * freq < 300; j++)//vecFFT.Length
+                for (int j = 0; j * freq < frequency_range; j++)//vecFFT.Length
                 {
                     FFT_chart.Series[0].Points.AddXY(j*freq, vecFFT[j]);
                 }
@@ -268,6 +282,6 @@ namespace test
             return Math.Sqrt(sum / x.Length);
         }
 
-     
+      
     }
 }

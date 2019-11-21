@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test.csproj", "{B96B6F69-AE44-4A40-888D-AC28A0EB7966}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "realtime_observation", "realtime_observation.csproj", "{B96B6F69-AE44-4A40-888D-AC28A0EB7966}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
