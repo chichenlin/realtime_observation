@@ -32,6 +32,12 @@ namespace realtime_observation
         int indexP;
         double SPmax;
         int iii;
+        double[] maxrms = new double[2] { 0, 0 };
+        double[] allrms0= new double[1280];//
+        double[] plotrms = new double[1280];
+        double allrms1;
+        int indexplot = 0;
+      
         //public StreamWriter SW_RMSData;
         //public StreamWriter SW_State;
         //public StreamWriter SW_RawDataX;
@@ -164,13 +170,41 @@ namespace realtime_observation
                 //Console.WriteLine("時間相差");
                 //Console.WriteLine(DateTime.Now.TimeOfDay.TotalSeconds - vecTime[vecTime.Length - 1]);
                 ////
-                time_chart.Series[0].Points.Clear();
-                time_chart.Series[1].Points.Clear();
-                time_chart.Series[2].Points.Clear();
+                ////////////////////////
+                ///振動監控  
                 
                 for (int i = 0; i < d00.Length; i++)
                 {
-                    if(channal0.Checked == true)
+                   allrms0[i] = Math.Sqrt(Math.Pow(d00[i], 2) + Math.Pow(d10[i], 2) + Math.Pow(d20[i], 2));
+                }
+                allrms1 = rootMeanSquare(allrms0);
+
+
+              
+                    plotrms[indexplot] = allrms1;
+                              
+                    
+                indexplot++;
+
+
+
+
+
+                maxrms[1] = allrms1;
+                if (maxrms[0] < maxrms[1])
+                {
+                    maxrms[0] = maxrms[1];
+                }
+                ///
+                ////////////////
+                time_chart.Series[0].Points.Clear();
+                time_chart.Series[1].Points.Clear();
+                time_chart.Series[2].Points.Clear();
+                time_chart.Series[3].Points.Clear();
+                time_chart.Series[4].Points.Clear();
+                for (int i = 0; i < d00.Length; i++)
+                {
+                    if (channal0.Checked == true)
                     {
                         time_chart.Series[0].Points.AddXY(vecTime[i] - vecTime[0], d00[i]);
                     }
@@ -182,8 +216,16 @@ namespace realtime_observation
                     {
                         time_chart.Series[2].Points.AddXY(vecTime[i] - vecTime[0], d20[i]);
                     }
-                }
+                    if (vibrationmonitor.Checked == true)
+                    {
+                        FFT_chart.Visible = false;
+                        time_chart.Size = new Size(618, 660);
+                        time_chart.Series[3].Points.AddXY(vecTime[i], maxrms[0]);
+                        time_chart.Series[4].Points.AddXY(vecTime[i], plotrms[i]);
 
+                    }
+                }
+                
 
 
                 //save rawdata
@@ -212,6 +254,7 @@ namespace realtime_observation
                     d1[i] = (d10[i] - d10.Average()) * 10;
                     d2[i] = (d20[i] - d20.Average()) * 10;
                 }
+                
 
 
                 double varFs = 1 / ((vecTime[data[0].SampleCount - 1] - vecTime[0]) / data[0].SampleCount);
@@ -264,6 +307,7 @@ namespace realtime_observation
                     vecFFT2[i] = Math.Sqrt(Math.Pow(realdata2[i], 2) + Math.Pow(imagdata2[i], 2));
                 }
 
+
                 FFT_chart.Series[0].Points.Clear();
                 FFT_chart.Series[1].Points.Clear();
                 FFT_chart.Series[2].Points.Clear();
@@ -300,16 +344,16 @@ namespace realtime_observation
             }
         }
 
-        //private static double rootMeanSquare(double[] x)
-        //{
-        //    double sum = 0;
-        //    for (int i = 0; i < x.Length; i++)
-        //    {
-        //        sum += (x[i] * x[i]);
-        //    }
-        //    return Math.Sqrt(sum / x.Length);
-        //}
+        private static double rootMeanSquare(double[] x)
+        {
+            double sum = 0;
+            for (int i = 0; i < x.Length; i++)
+            {
+                sum += (x[i] * x[i]);
+            }
+            return Math.Sqrt(sum / x.Length);
+        }
 
-      
+
     }
 }

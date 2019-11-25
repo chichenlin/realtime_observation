@@ -28,18 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title5 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series16 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series17 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series18 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(realtime_observation));
             this.time_chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.startbutton = new System.Windows.Forms.Button();
@@ -54,41 +56,53 @@
             this.channal0 = new System.Windows.Forms.CheckBox();
             this.channal1 = new System.Windows.Forms.CheckBox();
             this.channal2 = new System.Windows.Forms.CheckBox();
+            this.vibrationmonitor = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.time_chart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FFT_chart)).BeginInit();
             this.SuspendLayout();
             // 
             // time_chart
             // 
-            chartArea5.AxisX.Title = "Time";
-            chartArea5.Name = "ChartArea1";
-            this.time_chart.ChartAreas.Add(chartArea5);
-            legend5.Enabled = false;
-            legend5.Name = "Legend1";
-            this.time_chart.Legends.Add(legend5);
+            chartArea1.AxisX.Title = "Time";
+            chartArea1.Name = "ChartArea1";
+            this.time_chart.ChartAreas.Add(chartArea1);
+            legend1.Enabled = false;
+            legend1.Name = "Legend1";
+            this.time_chart.Legends.Add(legend1);
             this.time_chart.Location = new System.Drawing.Point(12, 12);
             this.time_chart.Name = "time_chart";
-            series13.ChartArea = "ChartArea1";
-            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series13.Legend = "Legend1";
-            series13.Name = "Series1";
-            series14.ChartArea = "ChartArea1";
-            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series14.Legend = "Legend1";
-            series14.Name = "Series2";
-            series15.ChartArea = "ChartArea1";
-            series15.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series15.Legend = "Legend1";
-            series15.Name = "Series3";
-            this.time_chart.Series.Add(series13);
-            this.time_chart.Series.Add(series14);
-            this.time_chart.Series.Add(series15);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Legend = "Legend1";
+            series2.Name = "Series2";
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series3.Legend = "Legend1";
+            series3.Name = "Series3";
+            series4.BorderWidth = 5;
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Legend = "Legend1";
+            series4.Name = "Series4";
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series5.Legend = "Legend1";
+            series5.Name = "Series5";
+            this.time_chart.Series.Add(series1);
+            this.time_chart.Series.Add(series2);
+            this.time_chart.Series.Add(series3);
+            this.time_chart.Series.Add(series4);
+            this.time_chart.Series.Add(series5);
             this.time_chart.Size = new System.Drawing.Size(618, 327);
             this.time_chart.TabIndex = 0;
             this.time_chart.Text = "chart1";
-            title5.Name = "Title1";
-            title5.Text = "time";
-            this.time_chart.Titles.Add(title5);
+            title1.Name = "Title1";
+            title1.Text = "time";
+            this.time_chart.Titles.Add(title1);
             // 
             // startbutton
             // 
@@ -112,32 +126,32 @@
             // 
             // FFT_chart
             // 
-            chartArea6.AxisX.Title = "Frequency";
-            chartArea6.Name = "ChartArea1";
-            this.FFT_chart.ChartAreas.Add(chartArea6);
-            legend6.Enabled = false;
-            legend6.Name = "Legend1";
-            this.FFT_chart.Legends.Add(legend6);
+            chartArea2.AxisX.Title = "Frequency";
+            chartArea2.Name = "ChartArea1";
+            this.FFT_chart.ChartAreas.Add(chartArea2);
+            legend2.Enabled = false;
+            legend2.Name = "Legend1";
+            this.FFT_chart.Legends.Add(legend2);
             this.FFT_chart.Location = new System.Drawing.Point(12, 345);
             this.FFT_chart.Name = "FFT_chart";
-            series16.ChartArea = "ChartArea1";
-            series16.Legend = "Legend1";
-            series16.Name = "Series1";
-            series17.ChartArea = "ChartArea1";
-            series17.Legend = "Legend1";
-            series17.Name = "Series2";
-            series18.ChartArea = "ChartArea1";
-            series18.Legend = "Legend1";
-            series18.Name = "Series3";
-            this.FFT_chart.Series.Add(series16);
-            this.FFT_chart.Series.Add(series17);
-            this.FFT_chart.Series.Add(series18);
+            series6.ChartArea = "ChartArea1";
+            series6.Legend = "Legend1";
+            series6.Name = "Series1";
+            series7.ChartArea = "ChartArea1";
+            series7.Legend = "Legend1";
+            series7.Name = "Series2";
+            series8.ChartArea = "ChartArea1";
+            series8.Legend = "Legend1";
+            series8.Name = "Series3";
+            this.FFT_chart.Series.Add(series6);
+            this.FFT_chart.Series.Add(series7);
+            this.FFT_chart.Series.Add(series8);
             this.FFT_chart.Size = new System.Drawing.Size(618, 327);
             this.FFT_chart.TabIndex = 3;
             this.FFT_chart.Text = "chart2";
-            title6.Name = "Title1";
-            title6.Text = "FFT";
-            this.FFT_chart.Titles.Add(title6);
+            title2.Name = "Title1";
+            title2.Text = "FFT";
+            this.FFT_chart.Titles.Add(title2);
             // 
             // samplepoint
             // 
@@ -199,8 +213,6 @@
             // channal0
             // 
             this.channal0.AutoSize = true;
-            this.channal0.Checked = true;
-            this.channal0.CheckState = System.Windows.Forms.CheckState.Checked;
             this.channal0.Location = new System.Drawing.Point(636, 196);
             this.channal0.Name = "channal0";
             this.channal0.Size = new System.Drawing.Size(66, 16);
@@ -211,8 +223,6 @@
             // channal1
             // 
             this.channal1.AutoSize = true;
-            this.channal1.Checked = true;
-            this.channal1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.channal1.Location = new System.Drawing.Point(636, 218);
             this.channal1.Name = "channal1";
             this.channal1.Size = new System.Drawing.Size(66, 16);
@@ -223,8 +233,6 @@
             // channal2
             // 
             this.channal2.AutoSize = true;
-            this.channal2.Checked = true;
-            this.channal2.CheckState = System.Windows.Forms.CheckState.Checked;
             this.channal2.Location = new System.Drawing.Point(636, 240);
             this.channal2.Name = "channal2";
             this.channal2.Size = new System.Drawing.Size(66, 16);
@@ -232,11 +240,22 @@
             this.channal2.Text = "channal2";
             this.channal2.UseVisualStyleBackColor = true;
             // 
+            // vibrationmonitor
+            // 
+            this.vibrationmonitor.AutoSize = true;
+            this.vibrationmonitor.Location = new System.Drawing.Point(636, 263);
+            this.vibrationmonitor.Name = "vibrationmonitor";
+            this.vibrationmonitor.Size = new System.Drawing.Size(72, 16);
+            this.vibrationmonitor.TabIndex = 7;
+            this.vibrationmonitor.Text = "振動監控";
+            this.vibrationmonitor.UseVisualStyleBackColor = true;
+            // 
             // realtime_observation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(772, 669);
+            this.Controls.Add(this.vibrationmonitor);
             this.Controls.Add(this.channal2);
             this.Controls.Add(this.channal1);
             this.Controls.Add(this.channal0);
@@ -275,6 +294,7 @@
         private System.Windows.Forms.CheckBox channal0;
         private System.Windows.Forms.CheckBox channal1;
         private System.Windows.Forms.CheckBox channal2;
+        private System.Windows.Forms.CheckBox vibrationmonitor;
     }
 }
 
