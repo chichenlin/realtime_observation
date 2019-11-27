@@ -83,10 +83,10 @@
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series3.Legend = "Legend1";
             series3.Name = "Series3";
-            series4.BorderWidth = 5;
             series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
             series4.Legend = "Legend1";
+            series4.MarkerStep = 10;
             series4.Name = "Series4";
             series5.ChartArea = "ChartArea1";
             series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -97,16 +97,15 @@
             this.time_chart.Series.Add(series3);
             this.time_chart.Series.Add(series4);
             this.time_chart.Series.Add(series5);
-            this.time_chart.Size = new System.Drawing.Size(618, 327);
+            this.time_chart.Size = new System.Drawing.Size(667, 327);
             this.time_chart.TabIndex = 0;
             this.time_chart.Text = "chart1";
             title1.Name = "Title1";
-            title1.Text = "time";
             this.time_chart.Titles.Add(title1);
             // 
             // startbutton
             // 
-            this.startbutton.Location = new System.Drawing.Point(658, 12);
+            this.startbutton.Location = new System.Drawing.Point(685, 12);
             this.startbutton.Name = "startbutton";
             this.startbutton.Size = new System.Drawing.Size(75, 23);
             this.startbutton.TabIndex = 1;
@@ -116,7 +115,7 @@
             // 
             // stopbutton
             // 
-            this.stopbutton.Location = new System.Drawing.Point(658, 12);
+            this.stopbutton.Location = new System.Drawing.Point(685, 12);
             this.stopbutton.Name = "stopbutton";
             this.stopbutton.Size = new System.Drawing.Size(75, 23);
             this.stopbutton.TabIndex = 2;
@@ -146,7 +145,7 @@
             this.FFT_chart.Series.Add(series6);
             this.FFT_chart.Series.Add(series7);
             this.FFT_chart.Series.Add(series8);
-            this.FFT_chart.Size = new System.Drawing.Size(618, 327);
+            this.FFT_chart.Size = new System.Drawing.Size(642, 327);
             this.FFT_chart.TabIndex = 3;
             this.FFT_chart.Text = "chart2";
             title2.Name = "Title1";
@@ -156,7 +155,7 @@
             // samplepoint
             // 
             this.samplepoint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.samplepoint.Location = new System.Drawing.Point(636, 70);
+            this.samplepoint.Location = new System.Drawing.Point(660, 404);
             this.samplepoint.Name = "samplepoint";
             this.samplepoint.Size = new System.Drawing.Size(100, 22);
             this.samplepoint.TabIndex = 4;
@@ -165,7 +164,7 @@
             // textBox1
             // 
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Location = new System.Drawing.Point(636, 49);
+            this.textBox1.Location = new System.Drawing.Point(660, 383);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(100, 15);
@@ -175,7 +174,7 @@
             // textBox2
             // 
             this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox2.Location = new System.Drawing.Point(636, 147);
+            this.textBox2.Location = new System.Drawing.Point(660, 483);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.Size = new System.Drawing.Size(100, 15);
@@ -185,7 +184,7 @@
             // textBox3
             // 
             this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox3.Location = new System.Drawing.Point(636, 168);
+            this.textBox3.Location = new System.Drawing.Point(660, 504);
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
             this.textBox3.Size = new System.Drawing.Size(100, 22);
@@ -194,7 +193,7 @@
             // textBox4
             // 
             this.textBox4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox4.Location = new System.Drawing.Point(636, 119);
+            this.textBox4.Location = new System.Drawing.Point(660, 455);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(100, 22);
             this.textBox4.TabIndex = 4;
@@ -203,7 +202,7 @@
             // textBox5
             // 
             this.textBox5.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox5.Location = new System.Drawing.Point(636, 98);
+            this.textBox5.Location = new System.Drawing.Point(660, 434);
             this.textBox5.Name = "textBox5";
             this.textBox5.ReadOnly = true;
             this.textBox5.Size = new System.Drawing.Size(100, 15);
@@ -213,7 +212,7 @@
             // channal0
             // 
             this.channal0.AutoSize = true;
-            this.channal0.Location = new System.Drawing.Point(636, 196);
+            this.channal0.Location = new System.Drawing.Point(685, 41);
             this.channal0.Name = "channal0";
             this.channal0.Size = new System.Drawing.Size(66, 16);
             this.channal0.TabIndex = 6;
@@ -223,7 +222,7 @@
             // channal1
             // 
             this.channal1.AutoSize = true;
-            this.channal1.Location = new System.Drawing.Point(636, 218);
+            this.channal1.Location = new System.Drawing.Point(685, 63);
             this.channal1.Name = "channal1";
             this.channal1.Size = new System.Drawing.Size(66, 16);
             this.channal1.TabIndex = 6;
@@ -233,7 +232,7 @@
             // channal2
             // 
             this.channal2.AutoSize = true;
-            this.channal2.Location = new System.Drawing.Point(636, 240);
+            this.channal2.Location = new System.Drawing.Point(685, 85);
             this.channal2.Name = "channal2";
             this.channal2.Size = new System.Drawing.Size(66, 16);
             this.channal2.TabIndex = 6;
@@ -243,7 +242,7 @@
             // vibrationmonitor
             // 
             this.vibrationmonitor.AutoSize = true;
-            this.vibrationmonitor.Location = new System.Drawing.Point(636, 263);
+            this.vibrationmonitor.Location = new System.Drawing.Point(685, 108);
             this.vibrationmonitor.Name = "vibrationmonitor";
             this.vibrationmonitor.Size = new System.Drawing.Size(72, 16);
             this.vibrationmonitor.TabIndex = 7;

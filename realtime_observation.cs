@@ -33,10 +33,13 @@ namespace realtime_observation
         double SPmax;
         int iii;
         double[] maxrms = new double[2] { 0, 0 };
-        double[] allrms0= new double[1280];//
-        double[] plotrms = new double[1280];
+        double[] allrms0 = new double[1280];//
+        double[] plotrms = new double[1280] ;
         double allrms1;
-        int indexplot = 0;
+        int indexplot ;
+        double[] time = new double[100];
+        double starttime;
+       
       
         //public StreamWriter SW_RMSData;
         //public StreamWriter SW_State;
@@ -52,11 +55,11 @@ namespace realtime_observation
 
         private void startbutton_Click(object sender, EventArgs e)
         {
-            
+
             Refresh();
+            starttime = DateTime.Now.TimeOfDay.TotalSeconds;
             startbutton.Visible = false;
             stopbutton.Visible = true;
-            time_chart.Series[0].Points.Clear();
             StartDAQ(6000);
             
         }
@@ -132,9 +135,10 @@ namespace realtime_observation
 
             runningTask = null;
             myTask.Dispose();
-
+            maxrms[0] = 0;
+            plotrms = new double[plotrms.Length];
             indexP = 0;
-            iii = 0;
+            indexplot = 0;
         }
         private void AnalogInCallback(IAsyncResult ar)
         {
@@ -172,29 +176,41 @@ namespace realtime_observation
                 ////
                 ////////////////////////
                 ///振動監控  
-                
+                allrms0 = new double[d00.Length];
                 for (int i = 0; i < d00.Length; i++)
                 {
                    allrms0[i] = Math.Sqrt(Math.Pow(d00[i], 2) + Math.Pow(d10[i], 2) + Math.Pow(d20[i], 2));
                 }
                 allrms1 = rootMeanSquare(allrms0);
-
-
-              
+                ///監控示波器
+                if (indexplot > time.Length)
+                {
+                    for (int i = 0; i < time.Length-1; i++)
+                    {
+                        time[i] = time[i + 1];
+                        plotrms[i] = plotrms[i + 1];
+                        
+                    }
+                    time[time.Length - 1] = time[time.Length - 1] + Convert.ToDouble(samplepoint.Text) / 12800;
+                    plotrms[time.Length - 1] = allrms1;
+                }
+                else
+                {
+                    time[0] = starttime;
+                    for (int i = 1; i < time.Length; i++)//time.Length
+                    {
+                        time[i] = starttime + Convert.ToDouble(samplepoint.Text) / 12800 * i;
+                    }
                     plotrms[indexplot] = allrms1;
-                              
-                    
+                }
+                ///
                 indexplot++;
-
-
-
-
-
                 maxrms[1] = allrms1;
                 if (maxrms[0] < maxrms[1])
                 {
                     maxrms[0] = maxrms[1];
                 }
+
                 ///
                 ////////////////
                 time_chart.Series[0].Points.Clear();
@@ -202,30 +218,61 @@ namespace realtime_observation
                 time_chart.Series[2].Points.Clear();
                 time_chart.Series[3].Points.Clear();
                 time_chart.Series[4].Points.Clear();
+
                 for (int i = 0; i < d00.Length; i++)
                 {
                     if (channal0.Checked == true)
                     {
-                        time_chart.Series[0].Points.AddXY(vecTime[i] - vecTime[0], d00[i]);
+                        time_chart.Series[0].Enabled = true;
+                        time_chart.Series[0].Points.AddXY(vecTime[i] , d00[i]);
+                    }
+                    else 
+                    {
+                        time_chart.Series[0].Enabled = false;
                     }
                     if (channal1.Checked == true)
                     {
-                        time_chart.Series[1].Points.AddXY(vecTime[i] - vecTime[0], d10[i]);
+                        time_chart.Series[1].Enabled = true;
+                        time_chart.Series[1].Points.AddXY(vecTime[i] , d10[i]);
+                    }
+                    else
+                    {
+                        time_chart.Series[1].Enabled = false;
                     }
                     if (channal2.Checked == true)
                     {
-                        time_chart.Series[2].Points.AddXY(vecTime[i] - vecTime[0], d20[i]);
+                        time_chart.Series[2].Enabled = true;
+                        time_chart.Series[2].Points.AddXY(vecTime[i] , d20[i]);
                     }
+                    else
+                    {
+                        time_chart.Series[2].Enabled = false;
+                    }
+                    
+                }
+                for (int i = 0; i < time.Length; i++)
+                {
                     if (vibrationmonitor.Checked == true)
                     {
                         FFT_chart.Visible = false;
-                        time_chart.Size = new Size(618, 660);
-                        time_chart.Series[3].Points.AddXY(vecTime[i], maxrms[0]);
-                        time_chart.Series[4].Points.AddXY(vecTime[i], plotrms[i]);
-
+                        FFT_chart.Enabled = false;
+                        this.Size = new Size(788, 380);
+                        time_chart.Series[3].Enabled = true;
+                        time_chart.Series[4].Enabled = true;
+                        time_chart.Series[3].Points.AddXY(time[i], maxrms[0]);
+                        time_chart.Series[4].Points.AddXY(time[i], plotrms[i]);
+                    }
+                    else
+                    {
+                        this.Size = new Size(788, 708);
+                        FFT_chart.Visible = true;
+                        FFT_chart.Enabled = true;
+                        time_chart.Series[3].Enabled = false;
+                        time_chart.Series[4].Enabled = false;
                     }
                 }
                 
+
 
 
                 //save rawdata
