@@ -38,12 +38,13 @@ namespace realtime_observation
         double allrms1;
         int indexplot ;
         double[] time = new double[100];
-        double starttime;
-       
-      
+        double starttime,warning,alarm;
+
+
+
         //public StreamWriter SW_RMSData;
         //public StreamWriter SW_State;
-        //public StreamWriter SW_RawDataX;
+        public StreamWriter SW_RawData;
         //public StreamWriter SW_FFTDataX;
 
         public realtime_observation()
@@ -51,6 +52,9 @@ namespace realtime_observation
             InitializeComponent();
             startbutton.Visible = true;
             stopbutton.Visible = false;
+            greenlight.Visible = true;
+            yellowlight.Visible = false;
+            redlight.Visible = false;
         }
 
         private void startbutton_Click(object sender, EventArgs e)
@@ -60,6 +64,7 @@ namespace realtime_observation
             starttime = DateTime.Now.TimeOfDay.TotalSeconds;
             startbutton.Visible = false;
             stopbutton.Visible = true;
+            alarmtext.Enabled = false;
             StartDAQ(6000);
             
         }
@@ -69,6 +74,7 @@ namespace realtime_observation
             StopDAQ();
             startbutton.Visible = true;
             stopbutton.Visible = false;
+            alarmtext.Enabled = true;
             Refresh();
         }
 
@@ -92,7 +98,7 @@ namespace realtime_observation
             double[] chan = new double[4] { 1, 1, 1, 0 };
             //SW_RMSData = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\RMSData.txt");
             //SW_State = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\State.txt");
-            //SW_RawDataX = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_" + a + "_" + "RawDataX.txt");
+            SW_RawData = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_"  + "RawDataX.txt");
             //SW_FFTDataX = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_" + a + "_" + "FFTDataX.txt");
 
 
@@ -130,7 +136,7 @@ namespace realtime_observation
             // Dispose of the task
             //SW_RMSData.Dispose();
             //SW_State.Dispose();
-            //SW_RawDataX.Dispose();
+            SW_RawData.Dispose();
             //SW_FFTDataX.Dispose();
 
             runningTask = null;
@@ -147,6 +153,7 @@ namespace realtime_observation
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 // Read the available data from the channels
+                
                 data = analogInReader.EndReadWaveform(ar);
 
                 sw.Stop();
@@ -210,7 +217,21 @@ namespace realtime_observation
                 {
                     maxrms[0] = maxrms[1];
                 }
+                alarm = Convert.ToDouble(alarmtext.Text);
+                warning = 0.5 * alarm;
 
+                //SW_RMSData.Write(vecTime[0]);
+                //SW_RMSData.Write(",");
+                //SW_RMSData.WriteLine(allrms1);
+                for (int i = 0; i < d00.Length; i++)
+                {
+                    SW_RawData.Write(d00[i]);
+                    SW_RawData.Write(",");
+                    SW_RawData.Write(d10[i]);
+                    SW_RawData.Write(",");
+                    SW_RawData.WriteLine(d20[i]);
+                }
+                
                 ///
                 ////////////////
                 time_chart.Series[0].Points.Clear();
@@ -218,6 +239,8 @@ namespace realtime_observation
                 time_chart.Series[2].Points.Clear();
                 time_chart.Series[3].Points.Clear();
                 time_chart.Series[4].Points.Clear();
+                time_chart.Series[5].Points.Clear();
+                time_chart.Series[6].Points.Clear();
 
                 for (int i = 0; i < d00.Length; i++)
                 {
@@ -250,39 +273,70 @@ namespace realtime_observation
                     }
                     
                 }
+                if (maxrms[0] >=5)
+                {
+                    maxrms[0] = 5;
+                }
+                if (allrms1 >=alarm)
+                {
+                    redlight.Visible = true;
+                    greenlight.Visible = false;
+                    yellowlight.Visible = false;
+                }
+                else if (allrms1 >=warning && allrms1<=alarm)
+                {
+                    redlight.Visible = false;
+                    greenlight.Visible = false;
+                    yellowlight.Visible = true;
+                }
+                else
+                {
+                    redlight.Visible = false;
+                    greenlight.Visible = true;
+                    yellowlight.Visible = false;
+                }
                 for (int i = 0; i < time.Length; i++)
                 {
                     if (vibrationmonitor.Checked == true)
                     {
                         FFT_chart.Visible = false;
                         FFT_chart.Enabled = false;
-                        this.Size = new Size(788, 380);
+                        //this.Size = new Size(1024, 768);
                         time_chart.Series[3].Enabled = true;
                         time_chart.Series[4].Enabled = true;
-                        time_chart.Series[3].Points.AddXY(time[i], maxrms[0]);
-                        time_chart.Series[4].Points.AddXY(time[i], plotrms[i]);
+                        time_chart.Series[5].Enabled = true;
+                        time_chart.Series[6].Enabled = true;
+                        time_chart.Series[3].Points.AddXY(Math.Round((time[i] - starttime),2), plotrms[i]);
+                        time_chart.Series[4].Points.AddXY(Math.Round((time[i] - starttime), 2), alarm);
+                        time_chart.Series[5].Points.AddXY(Math.Round((time[i] - starttime), 2), warning);
+                        time_chart.Series[6].Points.AddXY(Math.Round((time[i] - starttime), 2), maxrms[0]);
+                        time_chart.ChartAreas[0].AxisY.Minimum = 0;
+                        time_chart.ChartAreas[0].AxisY.Maximum = 5;
                     }
                     else
                     {
-                        this.Size = new Size(788, 708);
+                        //this.Size = new Size(788, 708);
                         FFT_chart.Visible = true;
                         FFT_chart.Enabled = true;
+                        redlight.Visible = false;
+                        greenlight.Visible = false;
+                        yellowlight.Visible = false;
                         time_chart.Series[3].Enabled = false;
                         time_chart.Series[4].Enabled = false;
+                        time_chart.Series[5].Enabled = false;
+                        time_chart.Series[6].Enabled = false;
+                        
                     }
                 }
-                
+
 
 
 
                 //save rawdata
-                //for (int i = 0; i < d00.Length; i++)
-                //{
-                //    SW_RawDataX.Write(vecTime[i]);
-                //    SW_RawDataX.Write(",");
-                //    SW_RawDataX.WriteLine(d00[i]);
-                //}
-                //
+                
+                    
+              
+
 
                 //double rms = rootMeanSquare(d00);
                 //Console.WriteLine(rms);
@@ -291,92 +345,92 @@ namespace realtime_observation
                 //
 
 
-                double[] d0 = new double[d00.Length];
-                double[] d1 = new double[d10.Length];
-                double[] d2 = new double[d20.Length];
-                ////Console.WriteLine(d00.Length);
-                for (int i = 0; i < d0.Length; i++)
-                {
-                    d0[i] = (d00[i] - d00.Average()) * 10;
-                    d1[i] = (d10[i] - d10.Average()) * 10;
-                    d2[i] = (d20[i] - d20.Average()) * 10;
-                }
+                //////////double[] d0 = new double[d00.Length];
+                //////////double[] d1 = new double[d10.Length];
+                //////////double[] d2 = new double[d20.Length];
+                //////////////Console.WriteLine(d00.Length);
+                //////////for (int i = 0; i < d0.Length; i++)
+                //////////{
+                //////////    d0[i] = (d00[i] - d00.Average()) * 10;
+                //////////    d1[i] = (d10[i] - d10.Average()) * 10;
+                //////////    d2[i] = (d20[i] - d20.Average()) * 10;
+                //////////}
                 
 
 
-                double varFs = 1 / ((vecTime[data[0].SampleCount - 1] - vecTime[0]) / data[0].SampleCount);
+                //////////double varFs = 1 / ((vecTime[data[0].SampleCount - 1] - vecTime[0]) / data[0].SampleCount);
 
-                ////int indexMaterial = CUTeffiForm.indexMaterial;
+                //////////////int indexMaterial = CUTeffiForm.indexMaterial;
 
-                //double rms_xdata = rootMeanSquare(d0) * 10;
-                //double rms_ydata = rootMeanSquare(d1) * 10;
-                //double rms_vibration = Math.Sqrt(Math.Pow(rms_xdata, 2) + Math.Pow(rms_ydata, 2));
-
-
-                ////////////////////////////FFT////////////////////////////////////////
-                double datalength = d0.Length * 2;
-                double[] d0Copy = new double[d0.Length * 2];//*10 d0.Length*5 12800                 
-                double[] d1Copy = new double[d1.Length * 2];
-                double[] d2Copy = new double[d2.Length * 2];
-                for (int i = 0; i < d0.Length; i++)
-                {
-                    d0Copy[i] = d0[i];
-                    d1Copy[i] = d1[i];
-                    d2Copy[i] = d2[i];
-                }
-
-                double[] realdata0 = d0Copy;
-                double[] imagdata0 = new double[d0Copy.Length];
-                double[] realdata1 = d1Copy;
-                double[] imagdata1 = new double[d1Copy.Length];
-                double[] realdata2 = d2Copy;
-                double[] imagdata2 = new double[d2Copy.Length];
-
-                int numFFT = Convert.ToInt16(Math.Floor(Convert.ToDecimal(d0Copy.Length / 2)));
-                double[] vecFFT0 = new double[numFFT];
-                double[] vecFFT1 = new double[numFFT];
-                double[] vecFFT2 = new double[numFFT];
-                double[] vecFqtmp = new double[numFFT];
-
-                for (int i = 1; i < numFFT; i++)
-                {
-                    vecFqtmp[i] = vecFqtmp[i - 1] + (varFs / d0Copy.Length);
-                }
-
-                MathNet.Numerics.IntegralTransforms.Fourier.Forward(realdata0, imagdata0, MathNet.Numerics.IntegralTransforms.FourierOptions.Matlab);
-                MathNet.Numerics.IntegralTransforms.Fourier.Forward(realdata1, imagdata1, MathNet.Numerics.IntegralTransforms.FourierOptions.Matlab);
-                MathNet.Numerics.IntegralTransforms.Fourier.Forward(realdata2, imagdata2, MathNet.Numerics.IntegralTransforms.FourierOptions.Matlab);
-
-                for (int i = 0; i < numFFT; i++)
-                {
-                    vecFFT0[i] = Math.Sqrt(Math.Pow(realdata0[i], 2) + Math.Pow(imagdata0[i], 2));
-                    vecFFT1[i] = Math.Sqrt(Math.Pow(realdata1[i], 2) + Math.Pow(imagdata1[i], 2));
-                    vecFFT2[i] = Math.Sqrt(Math.Pow(realdata2[i], 2) + Math.Pow(imagdata2[i], 2));
-                }
+                ////////////double rms_xdata = rootMeanSquare(d0) * 10;
+                ////////////double rms_ydata = rootMeanSquare(d1) * 10;
+                ////////////double rms_vibration = Math.Sqrt(Math.Pow(rms_xdata, 2) + Math.Pow(rms_ydata, 2));
 
 
-                FFT_chart.Series[0].Points.Clear();
-                FFT_chart.Series[1].Points.Clear();
-                FFT_chart.Series[2].Points.Clear();
-                double freq = 12800 / datalength;
-                textBox3.Text = Convert.ToString(freq);
-                int frequency_range =Convert.ToInt32( textBox4.Text);
+                //////////////////////////////////////FFT////////////////////////////////////////
+                //////////double datalength = d0.Length * 2;
+                //////////double[] d0Copy = new double[d0.Length * 2];//*10 d0.Length*5 12800                 
+                //////////double[] d1Copy = new double[d1.Length * 2];
+                //////////double[] d2Copy = new double[d2.Length * 2];
+                //////////for (int i = 0; i < d0.Length; i++)
+                //////////{
+                //////////    d0Copy[i] = d0[i];
+                //////////    d1Copy[i] = d1[i];
+                //////////    d2Copy[i] = d2[i];
+                //////////}
 
-                for (int j = 0; j * freq < frequency_range; j++)//vecFFT.Length
-                {
-                    if (channal0.Checked == true)
-                    {
-                        FFT_chart.Series[0].Points.AddXY(j * freq, vecFFT0[j]);
-                    }
-                    if (channal1.Checked == true)
-                    {
-                        FFT_chart.Series[1].Points.AddXY(j * freq, vecFFT0[j]);
-                    }
-                    if (channal2.Checked == true)
-                    {
-                        FFT_chart.Series[2].Points.AddXY(j * freq, vecFFT0[j]);
-                    }
-                }
+                //////////double[] realdata0 = d0Copy;
+                //////////double[] imagdata0 = new double[d0Copy.Length];
+                //////////double[] realdata1 = d1Copy;
+                //////////double[] imagdata1 = new double[d1Copy.Length];
+                //////////double[] realdata2 = d2Copy;
+                //////////double[] imagdata2 = new double[d2Copy.Length];
+
+                //////////int numFFT = Convert.ToInt16(Math.Floor(Convert.ToDecimal(d0Copy.Length / 2)));
+                //////////double[] vecFFT0 = new double[numFFT];
+                //////////double[] vecFFT1 = new double[numFFT];
+                //////////double[] vecFFT2 = new double[numFFT];
+                //////////double[] vecFqtmp = new double[numFFT];
+
+                //////////for (int i = 1; i < numFFT; i++)
+                //////////{
+                //////////    vecFqtmp[i] = vecFqtmp[i - 1] + (varFs / d0Copy.Length);
+                //////////}
+
+                //////////MathNet.Numerics.IntegralTransforms.Fourier.Forward(realdata0, imagdata0, MathNet.Numerics.IntegralTransforms.FourierOptions.Matlab);
+                //////////MathNet.Numerics.IntegralTransforms.Fourier.Forward(realdata1, imagdata1, MathNet.Numerics.IntegralTransforms.FourierOptions.Matlab);
+                //////////MathNet.Numerics.IntegralTransforms.Fourier.Forward(realdata2, imagdata2, MathNet.Numerics.IntegralTransforms.FourierOptions.Matlab);
+
+                //////////for (int i = 0; i < numFFT; i++)
+                //////////{
+                //////////    vecFFT0[i] = Math.Sqrt(Math.Pow(realdata0[i], 2) + Math.Pow(imagdata0[i], 2));
+                //////////    vecFFT1[i] = Math.Sqrt(Math.Pow(realdata1[i], 2) + Math.Pow(imagdata1[i], 2));
+                //////////    vecFFT2[i] = Math.Sqrt(Math.Pow(realdata2[i], 2) + Math.Pow(imagdata2[i], 2));
+                //////////}
+
+
+                //////////FFT_chart.Series[0].Points.Clear();
+                //////////FFT_chart.Series[1].Points.Clear();
+                //////////FFT_chart.Series[2].Points.Clear();
+                //////////double freq = 12800 / datalength;
+                //////////textBox3.Text = Convert.ToString(freq);
+                //////////int frequency_range =Convert.ToInt32( textBox4.Text);
+
+                //////////for (int j = 0; j * freq < frequency_range; j++)//vecFFT.Length
+                //////////{
+                //////////    if (channal0.Checked == true)
+                //////////    {
+                //////////        FFT_chart.Series[0].Points.AddXY(j * freq, vecFFT0[j]);
+                //////////    }
+                //////////    if (channal1.Checked == true)
+                //////////    {
+                //////////        FFT_chart.Series[1].Points.AddXY(j * freq, vecFFT0[j]);
+                //////////    }
+                //////////    if (channal2.Checked == true)
+                //////////    {
+                //////////        FFT_chart.Series[2].Points.AddXY(j * freq, vecFFT0[j]);
+                //////////    }
+                //////////}
                 //save FFT data
 
                 //for (int j = 0; j * freq < 300; j++)
