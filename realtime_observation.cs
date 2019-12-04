@@ -65,6 +65,7 @@ namespace realtime_observation
             startbutton.Visible = false;
             stopbutton.Visible = true;
             alarmtext.Enabled = false;
+            rawdata_checkBox.Enabled = false;
             StartDAQ(6000);
             
         }
@@ -75,6 +76,7 @@ namespace realtime_observation
             startbutton.Visible = true;
             stopbutton.Visible = false;
             alarmtext.Enabled = true;
+            rawdata_checkBox.Enabled = true;
             Refresh();
         }
 
@@ -96,10 +98,14 @@ namespace realtime_observation
             double sen = 100;
             double EVN = 0.004;
             double[] chan = new double[4] { 1, 1, 1, 0 };
-            //SW_RMSData = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\RMSData.txt");
-            //SW_State = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\State.txt");
-            SW_RawData = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_"  + "RawDataX.txt");
-            //SW_FFTDataX = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_" + a + "_" + "FFTDataX.txt");
+            if (rawdata_checkBox.Checked == true)
+            {
+                //SW_RMSData = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\RMSData.txt");
+                //SW_State = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\State.txt");
+                SW_RawData = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_" + "RawData.txt");
+                //SW_FFTDataX = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_" + a + "_" + "FFTDataX.txt");
+            }
+
 
 
             for (int i = 0; i < chan.Length; i++)
@@ -134,10 +140,14 @@ namespace realtime_observation
         public void StopDAQ()
         {
             // Dispose of the task
-            //SW_RMSData.Dispose();
-            //SW_State.Dispose();
-            SW_RawData.Dispose();
-            //SW_FFTDataX.Dispose();
+            if (rawdata_checkBox.Checked == true)
+            {
+                //SW_RMSData.Dispose();
+                //SW_State.Dispose();
+                SW_RawData.Dispose();
+                //SW_FFTDataX.Dispose();
+            }
+
 
             runningTask = null;
             myTask.Dispose();
@@ -223,14 +233,18 @@ namespace realtime_observation
                 //SW_RMSData.Write(vecTime[0]);
                 //SW_RMSData.Write(",");
                 //SW_RMSData.WriteLine(allrms1);
-                for (int i = 0; i < d00.Length; i++)
+                if (rawdata_checkBox.Checked ==true)
                 {
-                    SW_RawData.Write(d00[i]);
-                    SW_RawData.Write(",");
-                    SW_RawData.Write(d10[i]);
-                    SW_RawData.Write(",");
-                    SW_RawData.WriteLine(d20[i]);
+                    for (int i = 0; i < d00.Length; i++)
+                    {
+                        SW_RawData.Write(d00[i]);
+                        SW_RawData.Write(",");
+                        SW_RawData.Write(d10[i]);
+                        SW_RawData.Write(",");
+                        SW_RawData.WriteLine(d20[i]);
+                    }
                 }
+                
                 
                 ///
                 ////////////////
@@ -301,7 +315,6 @@ namespace realtime_observation
                     {
                         FFT_chart.Visible = false;
                         FFT_chart.Enabled = false;
-                        //this.Size = new Size(1024, 768);
                         time_chart.Series[3].Enabled = true;
                         time_chart.Series[4].Enabled = true;
                         time_chart.Series[5].Enabled = true;
@@ -315,7 +328,6 @@ namespace realtime_observation
                     }
                     else
                     {
-                        //this.Size = new Size(788, 708);
                         FFT_chart.Visible = true;
                         FFT_chart.Enabled = true;
                         redlight.Visible = false;
@@ -325,7 +337,8 @@ namespace realtime_observation
                         time_chart.Series[4].Enabled = false;
                         time_chart.Series[5].Enabled = false;
                         time_chart.Series[6].Enabled = false;
-                        
+                        time_chart.ChartAreas[0].AxisY.Minimum = double.NaN;
+                        time_chart.ChartAreas[0].AxisY.Maximum = double.NaN;
                     }
                 }
 

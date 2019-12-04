@@ -66,6 +66,7 @@
             this.yellowlight = new System.Windows.Forms.PictureBox();
             this.redlight = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.rawdata_checkBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.time_chart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FFT_chart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.greenlight)).BeginInit();
@@ -357,11 +358,23 @@
             this.panel1.TabIndex = 13;
             this.panel1.Visible = false;
             // 
+            // rawdata_checkBox
+            // 
+            this.rawdata_checkBox.AutoSize = true;
+            this.rawdata_checkBox.Font = new System.Drawing.Font("新細明體", 20.25F);
+            this.rawdata_checkBox.Location = new System.Drawing.Point(1247, 764);
+            this.rawdata_checkBox.Name = "rawdata_checkBox";
+            this.rawdata_checkBox.Size = new System.Drawing.Size(110, 31);
+            this.rawdata_checkBox.TabIndex = 14;
+            this.rawdata_checkBox.Text = "rawdata";
+            this.rawdata_checkBox.UseVisualStyleBackColor = true;
+            // 
             // realtime_observation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1384, 861);
+            this.Controls.Add(this.rawdata_checkBox);
             this.Controls.Add(this.redlight);
             this.Controls.Add(this.yellowlight);
             this.Controls.Add(this.greenlight);
@@ -412,6 +425,7 @@
         private System.Windows.Forms.PictureBox yellowlight;
         private System.Windows.Forms.PictureBox redlight;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.CheckBox rawdata_checkBox;
     }
 }
 
