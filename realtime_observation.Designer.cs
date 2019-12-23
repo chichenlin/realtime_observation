@@ -83,6 +83,7 @@
             this.time_chart.Legends.Add(legend2);
             this.time_chart.Location = new System.Drawing.Point(12, 12);
             this.time_chart.Name = "time_chart";
+            this.time_chart.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.EarthTones;
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
             series1.Legend = "Legend1";
@@ -126,7 +127,7 @@
             this.time_chart.Series.Add(series6);
             this.time_chart.Series.Add(series7);
             this.time_chart.Series.Add(series8);
-            this.time_chart.Size = new System.Drawing.Size(1218, 837);
+            this.time_chart.Size = new System.Drawing.Size(1200, 840);
             this.time_chart.TabIndex = 0;
             this.time_chart.Text = "chart1";
             title1.Name = "Title1";
