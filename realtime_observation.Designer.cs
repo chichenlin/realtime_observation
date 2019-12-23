@@ -38,24 +38,12 @@
             System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(realtime_observation));
             this.time_chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.startbutton = new System.Windows.Forms.Button();
             this.stopbutton = new System.Windows.Forms.Button();
-            this.FFT_chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.samplepoint = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
             this.channal0 = new System.Windows.Forms.CheckBox();
             this.channal1 = new System.Windows.Forms.CheckBox();
             this.channal2 = new System.Windows.Forms.CheckBox();
@@ -65,14 +53,11 @@
             this.greenlight = new System.Windows.Forms.PictureBox();
             this.yellowlight = new System.Windows.Forms.PictureBox();
             this.redlight = new System.Windows.Forms.PictureBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.rawdata_checkBox = new System.Windows.Forms.CheckBox();
+            this.savedata_checkBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.time_chart)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.FFT_chart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.greenlight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yellowlight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.redlight)).BeginInit();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // time_chart
@@ -99,36 +84,40 @@
             this.time_chart.Location = new System.Drawing.Point(12, 12);
             this.time_chart.Name = "time_chart";
             series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
             series2.Legend = "Legend1";
             series2.Name = "Series2";
             series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
             series3.Legend = "Legend1";
             series3.Name = "Series3";
             series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
             series4.Color = System.Drawing.Color.Green;
             series4.Legend = "Legend1";
             series4.Name = "RMS";
             series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
             series5.Legend = "Legend2";
             series5.MarkerColor = System.Drawing.Color.Red;
             series5.Name = "Alarm";
             series6.ChartArea = "ChartArea1";
-            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
             series6.Legend = "Legend2";
             series6.MarkerColor = System.Drawing.Color.Gold;
             series6.Name = "Warning";
             series7.ChartArea = "ChartArea1";
-            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
             series7.Legend = "Legend2";
             series7.Name = "Max";
+            series8.ChartArea = "ChartArea1";
+            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            series8.Legend = "Legend1";
+            series8.Name = "mse";
             this.time_chart.Series.Add(series1);
             this.time_chart.Series.Add(series2);
             this.time_chart.Series.Add(series3);
@@ -136,6 +125,7 @@
             this.time_chart.Series.Add(series5);
             this.time_chart.Series.Add(series6);
             this.time_chart.Series.Add(series7);
+            this.time_chart.Series.Add(series8);
             this.time_chart.Size = new System.Drawing.Size(1218, 837);
             this.time_chart.TabIndex = 0;
             this.time_chart.Text = "chart1";
@@ -163,92 +153,6 @@
             this.stopbutton.Text = "stop";
             this.stopbutton.UseVisualStyleBackColor = true;
             this.stopbutton.Click += new System.EventHandler(this.stopbutton_Click);
-            // 
-            // FFT_chart
-            // 
-            chartArea2.AxisX.Title = "Frequency";
-            chartArea2.Name = "ChartArea1";
-            this.FFT_chart.ChartAreas.Add(chartArea2);
-            legend3.Enabled = false;
-            legend3.Name = "Legend1";
-            this.FFT_chart.Legends.Add(legend3);
-            this.FFT_chart.Location = new System.Drawing.Point(10, 4);
-            this.FFT_chart.Name = "FFT_chart";
-            series8.ChartArea = "ChartArea1";
-            series8.Legend = "Legend1";
-            series8.Name = "Series1";
-            series9.ChartArea = "ChartArea1";
-            series9.Legend = "Legend1";
-            series9.Name = "Series2";
-            series10.ChartArea = "ChartArea1";
-            series10.Legend = "Legend1";
-            series10.Name = "Series3";
-            this.FFT_chart.Series.Add(series8);
-            this.FFT_chart.Series.Add(series9);
-            this.FFT_chart.Series.Add(series10);
-            this.FFT_chart.Size = new System.Drawing.Size(642, 327);
-            this.FFT_chart.TabIndex = 3;
-            this.FFT_chart.Text = "chart2";
-            title2.Name = "Title1";
-            title2.Text = "FFT";
-            this.FFT_chart.Titles.Add(title2);
-            // 
-            // samplepoint
-            // 
-            this.samplepoint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.samplepoint.Location = new System.Drawing.Point(658, 63);
-            this.samplepoint.Name = "samplepoint";
-            this.samplepoint.Size = new System.Drawing.Size(100, 22);
-            this.samplepoint.TabIndex = 4;
-            this.samplepoint.Text = "1280";
-            // 
-            // textBox1
-            // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Location = new System.Drawing.Point(658, 42);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(100, 15);
-            this.textBox1.TabIndex = 5;
-            this.textBox1.Text = "samplepoint";
-            // 
-            // textBox2
-            // 
-            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox2.Location = new System.Drawing.Point(658, 142);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(100, 15);
-            this.textBox2.TabIndex = 5;
-            this.textBox2.Text = "頻率解析度";
-            // 
-            // textBox3
-            // 
-            this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox3.Location = new System.Drawing.Point(658, 163);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(100, 22);
-            this.textBox3.TabIndex = 4;
-            // 
-            // textBox4
-            // 
-            this.textBox4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox4.Location = new System.Drawing.Point(658, 114);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 22);
-            this.textBox4.TabIndex = 4;
-            this.textBox4.Text = "300";
-            // 
-            // textBox5
-            // 
-            this.textBox5.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox5.Location = new System.Drawing.Point(658, 93);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.ReadOnly = true;
-            this.textBox5.Size = new System.Drawing.Size(100, 15);
-            this.textBox5.TabIndex = 5;
-            this.textBox5.Text = "frequency range";
             // 
             // channal0
             // 
@@ -286,6 +190,8 @@
             // vibrationmonitor
             // 
             this.vibrationmonitor.AutoSize = true;
+            this.vibrationmonitor.Checked = true;
+            this.vibrationmonitor.CheckState = System.Windows.Forms.CheckState.Checked;
             this.vibrationmonitor.Font = new System.Drawing.Font("新細明體", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.vibrationmonitor.Location = new System.Drawing.Point(1247, 614);
             this.vibrationmonitor.Name = "vibrationmonitor";
@@ -343,38 +249,23 @@
             this.redlight.TabIndex = 12;
             this.redlight.TabStop = false;
             // 
-            // panel1
+            // savedata_checkBox
             // 
-            this.panel1.Controls.Add(this.textBox2);
-            this.panel1.Controls.Add(this.textBox5);
-            this.panel1.Controls.Add(this.textBox1);
-            this.panel1.Controls.Add(this.textBox4);
-            this.panel1.Controls.Add(this.textBox3);
-            this.panel1.Controls.Add(this.samplepoint);
-            this.panel1.Controls.Add(this.FFT_chart);
-            this.panel1.Location = new System.Drawing.Point(2, 341);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(773, 330);
-            this.panel1.TabIndex = 13;
-            this.panel1.Visible = false;
-            // 
-            // rawdata_checkBox
-            // 
-            this.rawdata_checkBox.AutoSize = true;
-            this.rawdata_checkBox.Font = new System.Drawing.Font("新細明體", 20.25F);
-            this.rawdata_checkBox.Location = new System.Drawing.Point(1247, 764);
-            this.rawdata_checkBox.Name = "rawdata_checkBox";
-            this.rawdata_checkBox.Size = new System.Drawing.Size(110, 31);
-            this.rawdata_checkBox.TabIndex = 14;
-            this.rawdata_checkBox.Text = "rawdata";
-            this.rawdata_checkBox.UseVisualStyleBackColor = true;
+            this.savedata_checkBox.AutoSize = true;
+            this.savedata_checkBox.Font = new System.Drawing.Font("新細明體", 20.25F);
+            this.savedata_checkBox.Location = new System.Drawing.Point(1247, 764);
+            this.savedata_checkBox.Name = "savedata_checkBox";
+            this.savedata_checkBox.Size = new System.Drawing.Size(118, 31);
+            this.savedata_checkBox.TabIndex = 14;
+            this.savedata_checkBox.Text = "savedata";
+            this.savedata_checkBox.UseVisualStyleBackColor = true;
             // 
             // realtime_observation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1384, 861);
-            this.Controls.Add(this.rawdata_checkBox);
+            this.Controls.Add(this.savedata_checkBox);
             this.Controls.Add(this.redlight);
             this.Controls.Add(this.yellowlight);
             this.Controls.Add(this.greenlight);
@@ -387,17 +278,13 @@
             this.Controls.Add(this.stopbutton);
             this.Controls.Add(this.startbutton);
             this.Controls.Add(this.time_chart);
-            this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "realtime_observation";
             this.Text = "realtime_observation";
             ((System.ComponentModel.ISupportInitialize)(this.time_chart)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.FFT_chart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.greenlight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.yellowlight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.redlight)).EndInit();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -408,13 +295,6 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart time_chart;
         private System.Windows.Forms.Button startbutton;
         private System.Windows.Forms.Button stopbutton;
-        private System.Windows.Forms.DataVisualization.Charting.Chart FFT_chart;
-        private System.Windows.Forms.TextBox samplepoint;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.CheckBox channal0;
         private System.Windows.Forms.CheckBox channal1;
         private System.Windows.Forms.CheckBox channal2;
@@ -424,8 +304,7 @@
         private System.Windows.Forms.PictureBox greenlight;
         private System.Windows.Forms.PictureBox yellowlight;
         private System.Windows.Forms.PictureBox redlight;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.CheckBox rawdata_checkBox;
+        private System.Windows.Forms.CheckBox savedata_checkBox;
     }
 }
 

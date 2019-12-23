@@ -73,6 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MSE.cs" />
     <Compile Include="realtime_observation.cs">
       <SubType>Form</SubType>
     </Compile>

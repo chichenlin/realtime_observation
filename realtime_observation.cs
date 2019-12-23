@@ -35,17 +35,17 @@ namespace realtime_observation
         double[] maxrms = new double[2] { 0, 0 };
         double[] allrms0 = new double[1280];//
         double[] plotrms = new double[1280] ;
+        double[] MSE = new double[1280];
         double allrms1;
-        int indexplot ;
+        int indexplot,scale = 1 ;
         double[] time = new double[100];
         double starttime,warning,alarm;
 
 
 
-        //public StreamWriter SW_RMSData;
-        //public StreamWriter SW_State;
+        public StreamWriter SW_RMSData;
         public StreamWriter SW_RawData;
-        //public StreamWriter SW_FFTDataX;
+        public StreamWriter SW_entropy;
 
         public realtime_observation()
         {
@@ -65,7 +65,7 @@ namespace realtime_observation
             startbutton.Visible = false;
             stopbutton.Visible = true;
             alarmtext.Enabled = false;
-            rawdata_checkBox.Enabled = false;
+            savedata_checkBox.Enabled = false;
             StartDAQ(6000);
             
         }
@@ -76,7 +76,7 @@ namespace realtime_observation
             startbutton.Visible = true;
             stopbutton.Visible = false;
             alarmtext.Enabled = true;
-            rawdata_checkBox.Enabled = true;
+            savedata_checkBox.Enabled = true;
             Refresh();
         }
 
@@ -98,12 +98,12 @@ namespace realtime_observation
             double sen = 100;
             double EVN = 0.004;
             double[] chan = new double[4] { 1, 1, 1, 0 };
-            if (rawdata_checkBox.Checked == true)
+            if (savedata_checkBox.Checked == true)
             {
-                //SW_RMSData = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\RMSData.txt");
-                //SW_State = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\State.txt");
+                SW_RMSData = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_" + "RMSData.txt");
                 SW_RawData = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_" + "RawData.txt");
-                //SW_FFTDataX = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_" + a + "_" + "FFTDataX.txt");
+                SW_entropy = new StreamWriter(System.Environment.CurrentDirectory + "\\logData\\" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + "_" + "Entropy.txt");
+                
             }
 
 
@@ -122,7 +122,7 @@ namespace realtime_observation
             }
 
             myTask.Timing.ConfigureSampleClock("", Convert.ToDouble(12800),
-                SampleClockActiveEdge.Rising, SampleQuantityMode.ContinuousSamples, Convert.ToInt32(samplepoint.Text));
+                SampleClockActiveEdge.Rising, SampleQuantityMode.ContinuousSamples, Convert.ToInt32(1280));
 
             myTask.Control(TaskAction.Verify);
 
@@ -133,19 +133,18 @@ namespace realtime_observation
 
 
             analogInReader.SynchronizeCallbacks = true;
-            analogInReader.BeginReadWaveform(Convert.ToInt32(samplepoint.Text), analogCallback, myTask);
+            analogInReader.BeginReadWaveform(Convert.ToInt32(1280), analogCallback, myTask);
 
         }
 
         public void StopDAQ()
         {
             // Dispose of the task
-            if (rawdata_checkBox.Checked == true)
+            if (savedata_checkBox.Checked == true)
             {
-                //SW_RMSData.Dispose();
-                //SW_State.Dispose();
+                SW_RMSData.Dispose();
                 SW_RawData.Dispose();
-                //SW_FFTDataX.Dispose();
+                SW_entropy.Dispose();
             }
 
 
@@ -153,6 +152,7 @@ namespace realtime_observation
             myTask.Dispose();
             maxrms[0] = 0;
             plotrms = new double[plotrms.Length];
+            MSE = new double[MSE.Length];
             indexP = 0;
             indexplot = 0;
         }
@@ -166,9 +166,7 @@ namespace realtime_observation
                 
                 data = analogInReader.EndReadWaveform(ar);
 
-                sw.Stop();
-                TimeSpan ts2 = sw.Elapsed;
-                Console.WriteLine(ts2);
+                
 
 
                 double[] vecTime = new double[data[0].SampleCount];
@@ -199,6 +197,9 @@ namespace realtime_observation
                    allrms0[i] = Math.Sqrt(Math.Pow(d00[i], 2) + Math.Pow(d10[i], 2) + Math.Pow(d20[i], 2));
                 }
                 allrms1 = rootMeanSquare(allrms0);
+                double[] allentropy = new double[scale];
+                allentropy = MultiScale_Entropy.MultiScaleEn3(allrms0, scale);
+                
                 ///監控示波器
                 if (indexplot > time.Length)
                 {
@@ -206,19 +207,22 @@ namespace realtime_observation
                     {
                         time[i] = time[i + 1];
                         plotrms[i] = plotrms[i + 1];
+                        MSE[i] = MSE[i + 1];
                         
                     }
-                    time[time.Length - 1] = time[time.Length - 1] + Convert.ToDouble(samplepoint.Text) / 12800;
+                    time[time.Length - 1] = time[time.Length - 1] + Convert.ToDouble(1280) / 12800;
                     plotrms[time.Length - 1] = allrms1;
+                    MSE[time.Length - 1] = allentropy[0];
                 }
                 else
                 {
                     time[0] = starttime;
                     for (int i = 1; i < time.Length; i++)//time.Length
                     {
-                        time[i] = starttime + Convert.ToDouble(samplepoint.Text) / 12800 * i;
+                        time[i] = starttime + Convert.ToDouble(1280) / 12800 * i;
                     }
                     plotrms[indexplot] = allrms1;
+                    MSE[indexplot] = allentropy[0];
                 }
                 ///
                 indexplot++;
@@ -230,10 +234,8 @@ namespace realtime_observation
                 alarm = Convert.ToDouble(alarmtext.Text);
                 warning = 0.5 * alarm;
 
-                //SW_RMSData.Write(vecTime[0]);
-                //SW_RMSData.Write(",");
-                //SW_RMSData.WriteLine(allrms1);
-                if (rawdata_checkBox.Checked ==true)
+                
+                if (savedata_checkBox.Checked ==true)
                 {
                     for (int i = 0; i < d00.Length; i++)
                     {
@@ -243,6 +245,12 @@ namespace realtime_observation
                         SW_RawData.Write(",");
                         SW_RawData.WriteLine(d20[i]);
                     }
+                    SW_RMSData.Write(vecTime[0]);
+                    SW_RMSData.Write(",");
+                    SW_RMSData.WriteLine(allrms1);
+                    SW_entropy.Write(vecTime[0]);
+                    SW_entropy.Write(",");
+                    SW_entropy.WriteLine(allentropy[0]);
                 }
                 
                 
@@ -255,6 +263,7 @@ namespace realtime_observation
                 time_chart.Series[4].Points.Clear();
                 time_chart.Series[5].Points.Clear();
                 time_chart.Series[6].Points.Clear();
+                time_chart.Series[7].Points.Clear();
 
                 for (int i = 0; i < d00.Length; i++)
                 {
@@ -285,19 +294,19 @@ namespace realtime_observation
                     {
                         time_chart.Series[2].Enabled = false;
                     }
-                    
                 }
                 if (maxrms[0] >=5)
                 {
                     maxrms[0] = 5;
                 }
-                if (allrms1 >=alarm)
+                //紅綠燈 可變
+                if (allrms1 >= alarm)//maxrms[0] >= alarm  allrms1
                 {
                     redlight.Visible = true;
                     greenlight.Visible = false;
                     yellowlight.Visible = false;
                 }
-                else if (allrms1 >=warning && allrms1<=alarm)
+                else if (allrms1 >= warning && allrms1 < alarm)//maxrms[0] >= warning && maxrms[0] < alarm
                 {
                     redlight.Visible = false;
                     greenlight.Visible = false;
@@ -309,12 +318,11 @@ namespace realtime_observation
                     greenlight.Visible = true;
                     yellowlight.Visible = false;
                 }
+                //
                 for (int i = 0; i < time.Length; i++)
                 {
                     if (vibrationmonitor.Checked == true)
                     {
-                        FFT_chart.Visible = false;
-                        FFT_chart.Enabled = false;
                         time_chart.Series[3].Enabled = true;
                         time_chart.Series[4].Enabled = true;
                         time_chart.Series[5].Enabled = true;
@@ -323,13 +331,12 @@ namespace realtime_observation
                         time_chart.Series[4].Points.AddXY(Math.Round((time[i] - starttime), 2), alarm);
                         time_chart.Series[5].Points.AddXY(Math.Round((time[i] - starttime), 2), warning);
                         time_chart.Series[6].Points.AddXY(Math.Round((time[i] - starttime), 2), maxrms[0]);
+                        time_chart.Series[7].Points.AddXY(Math.Round((time[i] - starttime), 2), MSE[i]);
                         time_chart.ChartAreas[0].AxisY.Minimum = 0;
                         time_chart.ChartAreas[0].AxisY.Maximum = 5;
                     }
                     else
                     {
-                        FFT_chart.Visible = true;
-                        FFT_chart.Enabled = true;
                         redlight.Visible = false;
                         greenlight.Visible = false;
                         yellowlight.Visible = false;
@@ -453,8 +460,10 @@ namespace realtime_observation
                 //    SW_FFTDataX.WriteLine(vecFFT[j]);
                 //}
                 ////
-                analogInReader.BeginMemoryOptimizedReadWaveform(Convert.ToInt32(samplepoint.Text), analogCallback, myTask, data);
-
+                analogInReader.BeginMemoryOptimizedReadWaveform(Convert.ToInt32(1280), analogCallback, myTask, data);
+                sw.Stop();
+                TimeSpan ts2 = sw.Elapsed;
+                Console.WriteLine(ts2);
             }
         }
 
